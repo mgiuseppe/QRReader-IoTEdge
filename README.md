@@ -7,7 +7,7 @@ La seguente soluzione IoT Edge si occupa di leggere QR e BAR CODE tramite una pi
 
 ## Quickstart per lo sviluppo
 
-Su Azure:
+Sul portale azure:
 
 * Creare un IoT Hub
   * Aggiungere un IoT Edge Device
