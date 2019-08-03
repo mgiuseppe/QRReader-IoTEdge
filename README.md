@@ -2,7 +2,7 @@
 
 La seguente soluzione IoT Edge si occupa di leggere QR e BAR CODE tramite una picamera e quando ne rivela uno:
 
-* Invia il testo del codice rilevato su iot hub
+* Invia su iot hub il testo del QR / BAR CODE rilevato
 * Accende un led
 
 ## Quickstart per lo sviluppo
