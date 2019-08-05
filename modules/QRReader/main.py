@@ -16,30 +16,13 @@ SENT_MESSAGES = 0
 
 #MAIN LOOP -------------------------------
 
-def send_qr(camera, scanner, hubManager):
+def do(camera, scanner, hub_manager):
     while True:
-        try:
-            global SENT_MESSAGES
-            
-            (width, height, raw_img) = camera.Capture(1)
-            (is_qr, text_value) = scanner.ReadQR(width, height, raw_img)
+        try:            
+            (is_detected, text_value) = detect_code(camera, scanner)        
 
-            if(is_qr):            
-                #pack and send message
-                current_utc_time = datetime.utcnow().strftime("%Y/%m/%d %H:%M:%S.%f")[:-2] #remove the last 2 cyphers from ms to obtain 4 cypher ms
-                output = {
-                    "text_value":text_value,
-                    "send_date": current_utc_time,
-                }
-                outputJson = json.dumps(output)
-
-                message = IoTHubMessage(outputJson)
-                map_properties = message.properties()
-                map_properties.add("sequenceNumber", str(SENT_MESSAGES))
-
-                hubManager.send_async("output1", message, 0)
-                print("-- sent message: {} - {}".format(SENT_MESSAGES, outputJson))
-                SENT_MESSAGES += 1
+            if(is_detected):            
+                forward_detected_value(text_value, hub_manager)
             else:
                 print("qr not detected")
 
@@ -47,7 +30,31 @@ def send_qr(camera, scanner, hubManager):
             print(e)
             raise
         
-        time.sleep(hubManager.MESSAGE_DELAY)
+        time.sleep(hub_manager.MESSAGE_DELAY)
+
+def detect_code(camera, scanner):
+    (width, height, raw_image) = camera.Capture(1)
+    return scanner.ReadQR(width, height, raw_image)
+
+def forward_detected_value(text_value, hub_manager):
+    global SENT_MESSAGES
+
+    #pack message
+    current_utc_time = datetime.utcnow().strftime("%Y/%m/%d %H:%M:%S.%f")[:-2] #remove the last 2 cyphers from ms to obtain 4 cypher ms
+    output = {
+        "text_value":text_value,
+        "send_date": current_utc_time,
+    }
+    outputJson = json.dumps(output)
+
+    message = IoTHubMessage(outputJson)
+    map_properties = message.properties()
+    map_properties.add("sequenceNumber", str(SENT_MESSAGES))
+
+    #send message
+    hub_manager.send_async("output1", message, 0)
+    print("-- sent message: {} - {}".format(SENT_MESSAGES, outputJson))
+    SENT_MESSAGES += 1
 
 # MAIN ---------------------------
 
@@ -66,7 +73,7 @@ def main(protocol):
         print ( "Starting the IoT Hub Python QR Scanner using protocol %s..." % hub_manager.client_protocol )
         print ( "The QR Scanner is now ready to transmit messages.  Press Ctrl-C to exit. ")
 
-        send_qr(camera, scanner, hub_manager)
+        do(camera, scanner, hub_manager)
 
     except IoTHubError as iothub_error:
         print ( "Unexpected error %s from IoTHub" % iothub_error )

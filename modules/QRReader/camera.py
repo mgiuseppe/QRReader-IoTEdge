@@ -12,11 +12,11 @@ class Camera():
         #  visualizzazione dello streaming della camera
         with picamera.PiCamera() as camera:
             camera.exposure_mode = 'auto'
-            camera.preview_fullscreen = False
-            # ridimensiono il preview per poter interrompere in caso di problemi
-            camera.preview_window = (300, 200, 640, 480)
-            camera.start_preview()
-            sleep(camera_delay)  # aumentare se si vuole inquadrare meglio
+            #decommenta se vuoi avere una preview di ciò che vede la camera
+            #camera.preview_fullscreen = False
+            #camera.preview_window = (300, 200, 640, 480)
+            #camera.start_preview()
+            #sleep(camera_delay)  # aumentare se si vuole inquadrare meglio
             camera.capture(stream, format='jpeg')
 
         # recupera tutto il flusso per creare l'immagine

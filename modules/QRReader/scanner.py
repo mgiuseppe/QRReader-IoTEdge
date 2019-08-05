@@ -6,13 +6,13 @@ class Scanner():
         image = decode((pixels, width, height))
 
         # stampa valore
-        is_qr = False
+        is_detected = False
         text_value = ""
         for symbol in image:
             print ("{0}: {1}".format(symbol.type, symbol.data))
             text_value = symbol.data.decode('utf8')
-            is_qr = True
+            is_detected = True
 
         del(image)
 
-        return (is_qr, text_value)
+        return (is_detected, text_value)

@@ -102,7 +102,7 @@
     },
     "QRReader": {
       "properties.desired": {
-        "SendDelay": 0
+        "SendDelay": 0.3
       }
     }
   }
