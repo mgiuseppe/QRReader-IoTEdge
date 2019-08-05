@@ -25,4 +25,5 @@ Sulla solution edge (usando vs code):
   * CONTAINER_REGISTRY_ADDRESS=XXX.azurecr.io
   * CONTAINER_REGISTRY_USERNAME_qrregistry=XXX
   * CONTAINER_REGISTRY_PASSWORD_qrregistry=XXX
+  * PYTHONPATH=./modules/QRReader <-- optional, usalo se vuoi che vscode risolva correttamente gli import dei moduli locali
 * Utilizzare l'estensione Azure IoT Tools per buildare le immagini docker dei moduli edge e pusharle sul container registry e per settare il target deploy per il device edge
